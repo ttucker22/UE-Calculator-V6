@@ -1370,10 +1370,10 @@ function calculateShoulderROM() {
                 totalElement.textContent = `${ueImpairment} UE = ${wpi} WPI`;
             } else {
                 totalElement.textContent = '0 UE = 0 WPI';
-
-                updateTotalImpairment();
-            }
-        }
+    }
+    
+    updateTotalImpairment(); 
+}
 
         function calculateShoulderInstability() {
             console.log("calculateShoulderInstability function called");
@@ -1386,10 +1386,10 @@ function calculateShoulderROM() {
                 totalElement.textContent = `${ueImpairment} UE = ${wpi} WPI`;
             } else {
                 totalElement.textContent = '0 UE = 0 WPI';
-
-                updateTotalImpairment();
-            }
-        }
+    }
+    
+    updateTotalImpairment(); 
+}
 
 function calculateShoulderSynovialHypertrophy(event) {
     const changedCheckbox = event.target;
@@ -1551,7 +1551,43 @@ function updateTotalImpairment() {
         breakdownHTML += `<p>ROM: ${romImpairment} UE</p>`;
     }
 
-    // Add other calculators here as needed
+        if (selectedOptions[selectedCards[0]].includes('Strength')) {
+        const strengthImpairment = parseInt(document.getElementById('shoulder-strength-total-ue').textContent.split(' ')[0]);
+        if (!isNaN(strengthImpairment) && strengthImpairment > 0) {
+            impairments.push(strengthImpairment);
+            breakdownHTML += `<p>Strength: ${strengthImpairment} UE</p>`;
+        }
+    }
+
+    if (selectedOptions[selectedCards[0]].includes('Arthroplasty')) {
+        const arthroplastyImpairment = parseInt(document.getElementById('shoulder-arthroplasty-total').textContent.split(' ')[0]);
+        if (!isNaN(arthroplastyImpairment) && arthroplastyImpairment > 0) {
+            impairments.push(arthroplastyImpairment);
+            breakdownHTML += `<p>Arthroplasty: ${arthroplastyImpairment} UE</p>`;
+        }
+    }
+
+    if (selectedOptions[selectedCards[0]].includes('Instability/Subluxation/Dislocation')) {
+        const instabilityImpairment = parseInt(document.getElementById('shoulder-instability-total').textContent.split(' ')[0]);
+        if (!isNaN(instabilityImpairment) && instabilityImpairment > 0) {
+            impairments.push(instabilityImpairment);
+            breakdownHTML += `<p>Instability: ${instabilityImpairment} UE</p>`;
+        }
+    }
+
+    if (impairments.length > 0) {
+        const combinedUE = combineImpairments(impairments);
+        const combinedWPI = Math.round(combinedUE * 0.6);
+
+        breakdownHTML += `<p><strong>Combined: ${impairments.join(' C ')} = ${combinedUE} UE = ${combinedWPI} WPI</strong></p>`;
+        totalImpairmentResult.textContent = `${combinedUE} UE = ${combinedWPI} WPI`;
+    } else {
+        breakdownHTML = '<p>No impairments calculated yet.</p>';
+        totalImpairmentResult.textContent = '0 UE = 0 WPI';
+    }
+
+    impairmentBreakdown.innerHTML = breakdownHTML;
+}
 
     const combinedUE = combineImpairments(impairments);
     const combinedWPI = Math.round(combinedUE * 0.6);
