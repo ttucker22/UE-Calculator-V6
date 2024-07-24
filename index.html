@@ -1595,7 +1595,7 @@ function updateTotalImpairment() {
     breakdownHTML += `<p><strong>Combined: ${impairments.join(' C ')} = ${combinedUE} UE = ${combinedWPI} WPI</strong></p>`;
     impairmentBreakdown.innerHTML = breakdownHTML;
     totalImpairmentResult.textContent = `${combinedUE} UE = ${combinedWPI} WPI`;
-}
+});
 
 // Existing event listener
 finalizeImpairmentBtn.addEventListener('click', () => {
