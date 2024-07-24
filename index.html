@@ -1504,6 +1504,61 @@ function findImpairment(angle, dataArray, angleField) {
     return impairment;
 }
 
+function combineImpairments(impairments) {
+    if (impairments.length === 0) return 0;
+    if (impairments.length === 1) return impairments[0];
+
+    impairments.sort((a, b) => b - a); // Sort in descending order
+    let result = impairments[0];
+
+    for (let i = 1; i < impairments.length; i++) {
+        result = result + impairments[i] * (1 - result / 100);
+        result = Math.round(result * 10) / 10; // Round to nearest 0.1%
+    }
+
+    return Math.round(result); // Round to nearest whole percent for final result
+}
+
+function updateTotalImpairment() {
+    const selectedBodyPart = selectedCards[0].charAt(0).toUpperCase() + selectedCards[0].slice(1);
+    const totalImpairmentTitle = document.getElementById('total-impairment-title');
+    totalImpairmentTitle.textContent = `${selectedBodyPart} - Total Impairment`;
+
+    const impairmentBreakdown = document.getElementById('impairment-breakdown');
+    const totalImpairmentResult = document.getElementById('total-impairment-result');
+
+    let impairments = [];
+    let breakdownHTML = '';
+
+    // Collect impairments from each calculator
+    if (selectedOptions[selectedCards[0]].includes('Synovial Hypertrophy')) {
+        const synovialImpairment = parseInt(document.getElementById('shoulder-synovial-hypertrophy-total').textContent.split(' ')[0]);
+        impairments.push(synovialImpairment);
+        breakdownHTML += `<p>Synovial Hypertrophy: ${synovialImpairment} UE</p>`;
+    }
+
+    if (selectedOptions[selectedCards[0]].includes('ROM')) {
+        const romImpairment = parseInt(document.getElementById('shoulder-rom-total').textContent);
+        impairments.push(romImpairment);
+        breakdownHTML += `<p>ROM: ${romImpairment} UE</p>`;
+    }
+
+    // Add other calculators here as needed
+
+    const combinedUE = combineImpairments(impairments);
+    const combinedWPI = Math.round(combinedUE * 0.6);
+
+    breakdownHTML += `<p><strong>Combined: ${impairments.join(' C ')} = ${combinedUE} UE = ${combinedWPI} WPI</strong></p>`;
+    impairmentBreakdown.innerHTML = breakdownHTML;
+    totalImpairmentResult.textContent = `${combinedUE} UE = ${combinedWPI} WPI`;
+}
+
+// Existing event listener
+finalizeImpairmentBtn.addEventListener('click', () => {
+    console.log("Finalize Impairment button clicked");
+    // Implement finalization logic here
+});
+        
         finalizeImpairmentBtn.addEventListener('click', () => {
             console.log("Finalize Impairment button clicked");
             // Implement finalization logic here
