@@ -1335,6 +1335,7 @@ function setupCalculatorEventListeners() {
 function calculateShoulderROM() {
     console.log("Calculating Shoulder ROM");
     updateShoulderImpairment();
+    updateTotalImpairment();
 }
 
         function calculateShoulderStrength(movement, inputType) {
@@ -1355,6 +1356,7 @@ function calculateShoulderROM() {
             }
 
             updateTotalShoulderStrengthImpairment();
+            updateTotalImpairment();
         }
 
         function calculateShoulderArthroplasty() {
@@ -1368,6 +1370,8 @@ function calculateShoulderROM() {
                 totalElement.textContent = `${ueImpairment} UE = ${wpi} WPI`;
             } else {
                 totalElement.textContent = '0 UE = 0 WPI';
+
+                updateTotalImpairment();
             }
         }
 
@@ -1382,6 +1386,8 @@ function calculateShoulderROM() {
                 totalElement.textContent = `${ueImpairment} UE = ${wpi} WPI`;
             } else {
                 totalElement.textContent = '0 UE = 0 WPI';
+
+                updateTotalImpairment();
             }
         }
 
@@ -1404,6 +1410,8 @@ function calculateShoulderSynovialHypertrophy(event) {
 
     const totalWPI = Math.round(totalUEImpairment * 0.6);
     document.getElementById('shoulder-synovial-hypertrophy-total').textContent = `${totalUEImpairment} UE = ${totalWPI} WPI`;
+
+    updateTotalImpairment();
 }
 
         function updateTotalShoulderStrengthImpairment() {
